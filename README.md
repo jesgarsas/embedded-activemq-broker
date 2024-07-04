@@ -5,5 +5,6 @@ The project is a java web application which brings a servlet that will init the 
 
 ## Deployment steps
 1. Copy your activemq.xml and paste it in %CATALINA_HOME%/conf
+2. Add in your catalina.properties file: activemq.config.path=%CATALINA_HOME%/conf/
 1. Copy the latest version of the file embedded-activemq.war to  %CATALINA_HOME%/webapps or anyother folder where you can deploy apps.
 1. Start the server.
