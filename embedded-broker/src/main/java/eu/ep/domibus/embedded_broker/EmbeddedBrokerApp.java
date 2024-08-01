@@ -1,24 +1,32 @@
 package eu.ep.domibus.embedded_broker;
 
+import java.util.logging.Logger;
+
+import org.apache.catalina.Context;
+import org.apache.catalina.LifecycleException;
+import org.apache.catalina.startup.Tomcat;
+
 public class EmbeddedBrokerApp {
-//	static Logger logger = Logger.getLogger(EmbeddedBrokerApp.class.getName());
-
-//	static CountDownLatch latch = new CountDownLatch(1);
 	
-	public static void main(String[] args) {
-//		try {
-//			logger.info("Init broker handler");
-//			EmbeddedBrokerHandler handler = new EmbeddedBrokerHandler();
-//			logger.info("Ended init broker handler");
-//			handler.createNewBroker("domibus1", "tcp://localhost:61616", "static:(tcp://localhost:61617)", false);
-//			handler.createNewBroker("domibus2", "tcp://localhost:61617", "static:(tcp://localhost:61616)", false);
-
-			// AWAIT forever
-//			latch.await();
-//		} catch (Exception e) {
-//
-//			e.printStackTrace();
-//		}
-		
+	private static final String TOMCAT_CONTEXT_PATH = "";
+	private static Logger logger = Logger.getLogger(EmbeddedBrokerApp.class.getName());
+	
+	public static void main(String[] args) throws LifecycleException {
+        // Create a Tomcat instance
+		logger.info("Starting embedded Tomcat");
+        Tomcat tomcat = new Tomcat();
+        Context context = tomcat.addContext(TOMCAT_CONTEXT_PATH, null);
+        context.addApplicationListener("eu.ep.domibus.embedded_broker.EmbeddedBrokerServlet");
+        
+        // Start the Tomcat instance
+        try {
+			tomcat.start();
+		} catch (LifecycleException e) {
+			logger.info("Tomcat failed on the start up");
+			throw e;
+		}
+        logger.info("Tomcat was start up successfully");
+        // Keep the Tomcat server running
+        tomcat.getServer().await();
 	}
 }

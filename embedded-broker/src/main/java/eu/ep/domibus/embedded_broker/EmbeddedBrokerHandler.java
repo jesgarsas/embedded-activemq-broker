@@ -16,7 +16,11 @@ public class EmbeddedBrokerHandler {
 	BrokerFactoryBean factoryBean;
 	
 	public EmbeddedBrokerHandler() throws Exception {
-		Resource config = new PathResource(System.getProperty("activemq.config.path") + "activemq.xml");;
+		String path = System.getProperty("activemq.config.path");
+		if (!path.endsWith("/")) {
+			path += "/";
+		}
+		Resource config = new PathResource(path + "activemq.xml");;
 		factoryBean = new BrokerFactoryBean(config);
 		factoryBean.afterPropertiesSet();
 	}
