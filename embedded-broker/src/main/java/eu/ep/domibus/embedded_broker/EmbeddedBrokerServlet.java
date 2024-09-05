@@ -1,7 +1,9 @@
 package eu.ep.domibus.embedded_broker;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -15,7 +17,12 @@ public class EmbeddedBrokerServlet implements ServletContextListener {
 	@Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-        	handler = new EmbeddedBrokerHandler();
+            // Get the ServletContext
+            ServletContext context = sce.getServletContext();
+            
+            // Retrieve the context parameter
+            String configPath = context.getInitParameter("activemq.config.path");
+        	handler = new EmbeddedBrokerHandler(Optional.ofNullable(configPath).orElse(""));
         } catch (Exception e) {
             e.printStackTrace();
         }
